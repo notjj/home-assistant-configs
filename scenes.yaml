@@ -1,0 +1,688 @@
+- id: '1586320327975'
+  name: Outside - All On
+  entities:
+    switch.landscape:
+      friendly_name: Landscape
+      polling_intensity: 2
+      state: 'on'
+    switch.garage_driveway_4:
+      friendly_name: Garage Driveway
+      polling_intensity: 2
+      state: 'on'
+    switch.house_driveway_lights:
+      friendly_name: House Driveway
+      polling_intensity: 2
+      state: 'on'
+    switch.back_porch:
+      friendly_name: Back Porch
+      polling_intensity: 2
+      state: 'on'
+    switch.right_porch:
+      friendly_name: Right Porch
+      polling_intensity: 2
+      state: 'on'
+    switch.left_front_porch:
+      friendly_name: Left Front Porch
+      polling_intensity: 2
+      state: 'on'
+    switch.house_exterior:
+      friendly_name: House Exterior
+      polling_intensity: 2
+      state: 'on'
+    switch.garage_exterior:
+      friendly_name: Garage Exterior
+      polling_intensity: 2
+      state: 'on'
+    switch.patio:
+      friendly_name: Patio
+      polling_intensity: 2
+      state: 'on'
+- id: '1586320870419'
+  name: Outside - Normal Night
+  entities:
+    switch.landscape:
+      friendly_name: Landscape
+      polling_intensity: 2
+      state: 'on'
+    switch.garage_exterior:
+      friendly_name: Garage Exterior
+      polling_intensity: 2
+      state: 'on'
+    switch.house_exterior:
+      friendly_name: House Exterior
+      polling_intensity: 2
+      state: 'on'
+- id: '1586320882925'
+  name: Outside - All Off
+  entities:
+    switch.garage_driveway_4:
+      friendly_name: Garage Driveway
+      polling_intensity: 2
+      state: 'off'
+    switch.house_driveway_lights:
+      friendly_name: House Driveway
+      polling_intensity: 2
+      state: 'off'
+    switch.landscape:
+      friendly_name: Landscape
+      polling_intensity: 2
+      state: 'off'
+    switch.back_porch:
+      friendly_name: Back Porch
+      polling_intensity: 2
+      state: 'off'
+    switch.left_front_porch:
+      friendly_name: Left Front Porch
+      polling_intensity: 2
+      state: 'off'
+    switch.right_porch:
+      friendly_name: Right Porch
+      polling_intensity: 2
+      state: 'off'
+    switch.patio:
+      friendly_name: Patio
+      polling_intensity: 2
+      state: 'off'
+    switch.garage_exterior:
+      friendly_name: Garage Exterior
+      polling_intensity: 2
+      state: 'off'
+    switch.house_exterior:
+      friendly_name: House Exterior
+      polling_intensity: 2
+      state: 'off'
+- id: '1586321141017'
+  name: House - All Off
+  entities:
+    switch.back_entryway:
+      friendly_name: Back Entryway
+      state: 'off'
+    light.kitchen_island:
+      friendly_name: Kitchen Island
+      supported_features: 33
+      state: 'off'
+    switch.kitchen_sitting_area:
+      friendly_name: Kitchen Sitting Area
+      state: 'off'
+    light.kitchen_walkway:
+      friendly_name: Kitchen Walkway
+      supported_features: 33
+      state: 'off'
+    light.bar_lights:
+      friendly_name: Bar Lights
+      supported_features: 33
+      state: 'off'
+    light.den_front:
+      friendly_name: Den Front
+      supported_features: 33
+      state: 'off'
+    light.den_middle:
+      friendly_name: Den Middle
+      supported_features: 33
+      state: 'off'
+    light.den_perimeter:
+      friendly_name: Den Perimeter
+      supported_features: 33
+      state: 'off'
+    switch.dining_room:
+      friendly_name: Dining Room
+      state: 'off'
+    switch.left_entryway:
+      friendly_name: Left Entryway
+      state: 'off'
+    switch.laundry_hallway:
+      friendly_name: Laundry Hallway
+      state: 'off'
+    switch.laundry_room:
+      friendly_name: Laundry Room
+      state: 'off'
+    light.master_reading:
+      friendly_name: Master Reading
+      supported_features: 33
+      state: 'off'
+    switch.master_lights:
+      friendly_name: Master Lights
+      state: 'off'
+    light.master_hall_lights:
+      friendly_name: Master Hall Lights
+      supported_features: 33
+      state: 'off'
+    switch.guest_hallway:
+      friendly_name: Guest Hallway
+      state: 'off'
+    light.bonus_room_left:
+      friendly_name: Bonus Room Left
+      supported_features: 33
+      state: 'off'
+    light.bonus_room_right:
+      friendly_name: Bonus Room Right
+      supported_features: 33
+      state: 'off'
+    switch.livingroomoutlet:
+      friendly_name: Livingroom
+      state: 'off'
+    switch.kitchen_cabinet:
+      friendly_name: Kitchen Cabinet Lights
+      state: 'off'
+    switch.stairs_uplights:
+      friendly_name: Stairs Uplights
+      state: 'off'
+    switch.office:
+      friendly_name: Office
+      state: 'off'
+- id: '1586321150289'
+  name: House - All On
+  entities:
+    switch.livingroomoutlet:
+      friendly_name: Livingroom
+      polling_intensity: 2
+      state: 'on'
+    light.kitchen_island:
+      brightness: 255
+      friendly_name: Kitchen Island
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+    switch.back_entryway:
+      friendly_name: Back Entryway
+      polling_intensity: 2
+      state: 'on'
+    switch.left_entryway:
+      friendly_name: Left Entryway
+      polling_intensity: 2
+      state: 'on'
+    switch.guest_hallway:
+      friendly_name: Guest Hallway
+      polling_intensity: 2
+      state: 'on'
+    light.den_middle:
+      brightness: 255
+      friendly_name: Den Middle
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+    light.bonus_room_left:
+      brightness: 255
+      friendly_name: Bonus Room Left
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+    light.bonus_room_right:
+      brightness: 255
+      friendly_name: Bonus Room Right
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+    switch.office:
+      friendly_name: Office
+      polling_intensity: 2
+      state: 'on'
+- id: '1586321160091'
+  name: Garage - All On
+  entities:
+    switch.garage_downstairs:
+      friendly_name: Garage Downstairs
+      polling_intensity: 2
+      state: 'on'
+    switch.garage_upstairs_7:
+      friendly_name: Garage Upstairs
+      polling_intensity: 2
+      state: 'on'
+    switch.garage_stairs:
+      friendly_name: Garage Stairs
+      polling_intensity: 2
+      state: 'on'
+- id: '1586320315261'
+  name: Garage - All Off
+  entities:
+    switch.garage_air_filter_5:
+      friendly_name: Garage Air Filter
+      polling_intensity: 2
+      state: 'off'
+    switch.garage_attic_8:
+      friendly_name: Garage Attic
+      polling_intensity: 2
+      state: 'off'
+    switch.garage_closet_6:
+      friendly_name: Garage Closet
+      polling_intensity: 2
+      state: 'off'
+    switch.garage_downstairs:
+      friendly_name: Garage Downstairs
+      polling_intensity: 2
+      state: 'off'
+    switch.garage_upstairs_7:
+      friendly_name: Garage Upstairs
+      polling_intensity: 2
+      state: 'off'
+    switch.garage_stairs:
+      friendly_name: Garage Stairs
+      polling_intensity: 2
+      state: 'off'
+- id: '1586321179569'
+  name: House and Garage - Normal Night
+  entities:
+    switch.landscape:
+      friendly_name: Landscape
+      state: 'on'
+    switch.livingroomoutlet:
+      friendly_name: Livingroom
+      state: 'on'
+    switch.stairs_downlights:
+      friendly_name: Stairs Downlights
+      state: 'on'
+    switch.house_exterior:
+      friendly_name: House Exterior
+      state: 'on'
+    switch.garage_exterior:
+      friendly_name: Garage Exterior
+      state: 'on'
+    switch.kitchen_cabinet:
+      friendly_name: Kitchen Cabinet Lights
+      state: 'off'
+    switch.kitchen_sitting_area:
+      friendly_name: Kitchen Sitting Area
+      state: 'off'
+    light.kitchen_island:
+      friendly_name: Kitchen Island
+      supported_features: 33
+      state: 'off'
+    light.kitchen_walkway:
+      friendly_name: Kitchen Walkway
+      supported_features: 33
+      state: 'off'
+    switch.office:
+      friendly_name: Office
+      state: 'off'
+    switch.stairs_uplights:
+      friendly_name: Stairs Uplights
+      state: 'off'
+    light.master_hall_lights:
+      friendly_name: Master Hall Lights
+      supported_features: 33
+      state: 'off'
+    switch.master_lights:
+      friendly_name: Master Lights
+      state: 'off'
+    light.bonus_room_left:
+      friendly_name: Bonus Room Left
+      supported_features: 33
+      state: 'off'
+    light.bonus_room_right:
+      friendly_name: Bonus Room Right
+      supported_features: 33
+      state: 'off'
+    light.den_front:
+      friendly_name: Den Front
+      supported_features: 33
+      state: 'off'
+    light.den_middle:
+      friendly_name: Den Middle
+      supported_features: 33
+      state: 'off'
+    light.den_perimeter:
+      friendly_name: Den Perimeter
+      supported_features: 33
+      state: 'off'
+    light.bar_lights:
+      friendly_name: Bar Lights
+      supported_features: 33
+      state: 'off'
+    switch.dining_room:
+      friendly_name: Dining Room
+      state: 'off'
+    switch.left_entryway:
+      friendly_name: Left Entryway
+      state: 'off'
+    switch.back_entryway:
+      friendly_name: Back Entryway
+      state: 'off'
+    switch.guest_hallway:
+      friendly_name: Guest Hallway
+      state: 'off'
+- id: '1586403205'
+  name: Den Bathroom On
+  entities:
+    light.den_bathroom:
+      brightness: 255
+      friendly_name: Den Bathroom
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+- id: '1586403206'
+  name: Den Bathroom Off
+  entities:
+    light.den_bathroom:
+      friendly_name: Den Bathroom
+      supported_features: 33
+      polling_intensity: 2
+      state: 'off'
+- id: '1586403207'
+  name: Den All On
+  entities:
+    light.den_front:
+      brightness: 255
+      friendly_name: Den Front
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+    light.den_middle:
+      brightness: 255
+      friendly_name: Den Middle
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+    light.den_perimeter:
+      brightness: 255
+      friendly_name: Den Perimeter
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+- id: '1586403208'
+  name: Den Movie
+  entities:
+    light.den_front:
+      brightness: 59
+      friendly_name: Den Front
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+    light.den_middle:
+      friendly_name: Den Middle
+      supported_features: 33
+      polling_intensity: 2
+      state: 'off'
+    light.den_perimeter:
+      brightness: 52
+      friendly_name: Den Perimeter
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+- id: '1586403209'
+  name: Den Dim
+  entities:
+    light.den_front:
+      brightness: 90
+      friendly_name: Den Front
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+    light.den_middle:
+      brightness: 98
+      friendly_name: Den Middle
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+    light.den_perimeter:
+      brightness: 85
+      friendly_name: Den Perimeter
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+- id: '1586403210'
+  name: Den All Off
+  entities:
+    light.den_front:
+      friendly_name: Den Front
+      supported_features: 33
+      polling_intensity: 2
+      state: 'off'
+    light.den_middle:
+      friendly_name: Den Middle
+      supported_features: 33
+      polling_intensity: 2
+      state: 'off'
+    light.den_perimeter:
+      friendly_name: Den Perimeter
+      supported_features: 33
+      polling_intensity: 2
+      state: 'off'
+- id: '1586403211'
+  name: Bonus All On
+  entities:
+    light.bonus_room_left:
+      brightness: 255
+      friendly_name: Bonus Room Left
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+    light.bonus_room_right:
+      brightness: 255
+      friendly_name: Bonus Room Right
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+- id: '1586403212'
+  name: Bonus All Off
+  entities:
+    light.bonus_room_left:
+      friendly_name: Bonus Room Left
+      supported_features: 33
+      polling_intensity: 2
+      state: 'off'
+    light.bonus_room_right:
+      friendly_name: Bonus Room Right
+      supported_features: 33
+      polling_intensity: 2
+      state: 'off'
+- id: '1586403213'
+  name: Guest Bathroom Day
+  entities:
+    light.guest_bathroom:
+      brightness: 255
+      friendly_name: Guest Bathroom
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+- id: '1586403214'
+  name: Guest Bathroom Night
+  entities:
+    light.guest_bathroom:
+      brightness: 90
+      friendly_name: Guest Bathroom
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+- id: '1586403215'
+  name: Guest Bathroom Off
+  entities:
+    light.guest_bathroom:
+      friendly_name: Guest Bathroom
+      supported_features: 33
+      polling_intensity: 2
+      state: 'off'
+- id: '1586403216'
+  name: Kit All On
+  entities:
+    switch.ge_quick_fit_smart_in_wall_paddle_switch_4:
+      friendly_name: Kitchen Cabinet Lights
+      polling_intensity: 2
+      state: 'on'
+    light.kitchen_island:
+      brightness: 255
+      friendly_name: Kitchen Island
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+    switch.kitchen_sitting_area:
+      friendly_name: Kitchen Sitting Area
+      polling_intensity: 2
+      state: 'on'
+    light.kitchen_walkway:
+      brightness: 255
+      friendly_name: Kitchen Walkway
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+    light.bar_lights:
+      brightness: 255
+      friendly_name: Bar Lights
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+- id: '1586403217'
+  name: Kit Dim
+  entities:
+    switch.ge_quick_fit_smart_in_wall_paddle_switch_4:
+      friendly_name: Kitchen Cabinet Lights
+      polling_intensity: 2
+      state: 'on'
+    light.kitchen_island:
+      friendly_name: Kitchen Island
+      supported_features: 33
+      polling_intensity: 2
+      state: 'off'
+    switch.kitchen_sitting_area:
+      friendly_name: Kitchen Sitting Area
+      polling_intensity: 2
+      state: 'off'
+    light.kitchen_walkway:
+      friendly_name: Kitchen Walkway
+      supported_features: 33
+      polling_intensity: 2
+      state: 'off'
+    light.bar_lights:
+      friendly_name: Bar Lights
+      supported_features: 33
+      polling_intensity: 2
+      state: 'off'
+- id: '1586403218'
+  name: Kit Normal
+  entities:
+    switch.ge_quick_fit_smart_in_wall_paddle_switch_4:
+      friendly_name: Kitchen Cabinet Lights
+      polling_intensity: 2
+      state: 'on'
+    light.kitchen_walkway:
+      brightness: 255
+      friendly_name: Kitchen Walkway
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+    light.kitchen_island:
+      brightness: 255
+      friendly_name: Kitchen Island
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+    switch.kitchen_sitting_area:
+      friendly_name: Kitchen Sitting Area
+      polling_intensity: 2
+      state: 'off'
+    light.bar_lights:
+      friendly_name: Bar Lights
+      supported_features: 33
+      polling_intensity: 2
+      state: 'off'
+- id: '1586403219'
+  name: Kit Off
+  entities:
+    switch.ge_quick_fit_smart_in_wall_paddle_switch_4:
+      friendly_name: Kitchen Cabinet Lights
+      polling_intensity: 2
+      state: 'off'
+    light.kitchen_island:
+      friendly_name: Kitchen Island
+      supported_features: 33
+      polling_intensity: 2
+      state: 'off'
+    switch.kitchen_sitting_area:
+      friendly_name: Kitchen Sitting Area
+      polling_intensity: 2
+      state: 'off'
+    light.kitchen_walkway:
+      friendly_name: Kitchen Walkway
+      supported_features: 33
+      polling_intensity: 2
+      state: 'off'
+    light.bar_lights:
+      friendly_name: Bar Lights
+      supported_features: 33
+      polling_intensity: 2
+      state: 'off'
+- id: '1615756881004'
+  name: House - Away
+  entities:
+    switch.back_entryway:
+      friendly_name: Back Entryway
+      polling_intensity: 2
+      state: 'on'
+- id: '1615756985088'
+  name: House - Home
+  entities:
+    switch.office:
+      friendly_name: Office
+      polling_intensity: 2
+      state: 'on'
+    light.kitchen_island:
+      brightness: 255
+      friendly_name: Kitchen Island
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+    light.master_hall_lights:
+      brightness: 255
+      friendly_name: Master Hall Lights
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+    switch.stairs_uplights:
+      friendly_name: Stairs Uplights
+      polling_intensity: 2
+      state: 'on'
+    switch.back_entryway:
+      friendly_name: Back Entryway
+      polling_intensity: 2
+      state: 'on'
+- id: '1615765201790'
+  name: Master Bathroom - Day
+  entities:
+    light.master_bathroom:
+      brightness: 255
+      friendly_name: Master Bathroom
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+- id: '1615765258681'
+  name: Master Bathroom - Night
+  entities:
+    light.master_bathroom:
+      brightness: 255
+      friendly_name: Master Bathroom
+      supported_features: 33
+      polling_intensity: 2
+      state: 'on'
+- id: '1615765289797'
+  name: Master Bathroom - Off
+  entities:
+    light.master_bathroom:
+      friendly_name: Master Bathroom
+      supported_features: 33
+      polling_intensity: 2
+      state: 'off'
+    switch.master_bath_infrared:
+      friendly_name: Master Bath Infrared
+      polling_intensity: 2
+      state: 'off'
+    switch.master_bath_toilet:
+      friendly_name: Master Bath Toilet
+      polling_intensity: 2
+      state: 'off'
+- id: '1615830734565'
+  name: House and Garage - Outside Night
+  entities:
+    switch.garage_exterior:
+      friendly_name: Garage Exterior
+      state: 'on'
+    switch.house_exterior:
+      friendly_name: House Exterior
+      state: 'on'
+    switch.landscape:
+      friendly_name: Landscape
+      state: 'on'
+    switch.livingroomoutlet:
+      friendly_name: Livingroom
+      state: 'on'
+    switch.stairs_downlights:
+      friendly_name: Stairs Downlights
+      state: 'on'

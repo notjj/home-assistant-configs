@@ -1,0 +1,548 @@
+- id: '1586309946206'
+  alias: Sunset Lights - Home
+  description: ''
+  trigger:
+  - event: sunset
+    offset: -00:15
+    platform: sun
+  condition:
+  - condition: state
+    entity_id: person.jj
+    state: home
+  action:
+  - data: {}
+    entity_id: automation.nighttime_lights_home
+    service: automation.trigger
+  mode: single
+- id: '1586310091711'
+  alias: Sunrise Lights
+  description: ''
+  trigger:
+  - event: sunrise
+    offset: 00:15
+    platform: sun
+  condition: []
+  action:
+  - scene: scene.outside_all_off
+  mode: single
+- id: '1586310341649'
+  alias: Nighttime Lights - Home
+  description: ''
+  trigger:
+  - entity_id: person.jj
+    event: enter
+    platform: zone
+    zone: zone.home
+  condition:
+  - after: sunset
+    after_offset: -00:15
+    before: sunrise
+    before_offset: +00:15
+    condition: sun
+  - condition: or
+    conditions:
+    - condition: zone
+      entity_id: person.jj
+      zone: zone.home
+    - condition: state
+      entity_id: input_boolean.assume_home
+      state: 'on'
+  - condition: state
+    entity_id: input_boolean.home_away_automation
+    state: 'true'
+  action:
+  - scene: scene.house_and_garage_outside_night
+  - scene: scene.house_home
+  mode: single
+- id: '1586310534562'
+  alias: Nighttime Lights - Away
+  description: ''
+  trigger:
+  - entity_id: person.jj
+    event: leave
+    platform: zone
+    zone: zone.home
+  condition:
+  - after: sunset
+    after_offset: -00:15
+    before: sunrise
+    before_offset: +00:15
+    condition: sun
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: person.jj
+      state: not_home
+    - after: sunrise
+      after_offset: +00:15
+      before: sunset
+      before_offset: -00:15
+      condition: sun
+  - condition: state
+    entity_id: input_boolean.home_away_automation
+    state: 'on'
+  - condition: state
+    entity_id: input_boolean.assume_home
+    state: 'off'
+  action:
+  - scene: scene.house_and_garage_outside_night
+  - scene: scene.house_away
+  mode: single
+- id: '1586310682603'
+  alias: Closet Timeout - Master
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 7c2f19af62214a07d920783c9fbb367d
+    entity_id: switch.master_closet
+    domain: switch
+    for:
+      hours: 0
+      minutes: 15
+      seconds: 0
+      milliseconds: 0
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 7c2f19af62214a07d920783c9fbb367d
+    entity_id: switch.master_closet
+    domain: switch
+  mode: single
+- id: '1586310759676'
+  alias: 3am Light Timeout
+  description: ''
+  trigger:
+  - at: 03:00:00
+    platform: time
+  condition: []
+  action:
+  - scene: scene.house_all_off
+  mode: single
+- id: '1586311421487'
+  alias: Vent Fan - On with Bathroom Lights
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 455b5f9025e505a938c1b442017b0247
+    entity_id: light.master_bathroom
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: bd8b2926d77cb67200dc6604674362df
+    entity_id: light.den_bathroom
+    domain: light
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 88866f37754b830a9dd41d79a1063e19
+    entity_id: switch.house_vent_fan_3
+    domain: switch
+  mode: single
+- id: '1586311465742'
+  alias: General Timeout - Vent Fan
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 88866f37754b830a9dd41d79a1063e19
+    entity_id: switch.house_vent_fan_3
+    domain: switch
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 88866f37754b830a9dd41d79a1063e19
+    entity_id: switch.house_vent_fan_3
+    domain: switch
+  mode: single
+- id: '1586322738102'
+  alias: Bathroom Timeout - Den
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: bd8b2926d77cb67200dc6604674362df
+    entity_id: light.den_bathroom
+    domain: light
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  condition:
+  - condition: state
+    entity_id: input_boolean.bathroom_timeouts
+    state: 'on'
+  action:
+  - type: turn_off
+    device_id: bd8b2926d77cb67200dc6604674362df
+    entity_id: light.den_bathroom
+    domain: light
+  mode: single
+- id: '1586481145686'
+  alias: Espresso Machine - Turn On
+  description: ''
+  trigger:
+  - at: 08:00:00
+    platform: time
+  condition:
+  - condition: state
+    entity_id: person.jj
+    state: home
+  action:
+  - type: turn_on
+    device_id: 64e4abfbcf96085a8eb3e9e56c0bde3b
+    entity_id: switch.espresso_machine_2
+    domain: switch
+  mode: single
+- id: '1586481195969'
+  alias: Espresso Machine - Turn Off
+  description: ''
+  trigger:
+  - at: '12:00:00'
+    platform: time
+  condition:
+  - condition: device
+    type: is_on
+    device_id: 64e4abfbcf96085a8eb3e9e56c0bde3b
+    entity_id: switch.espresso_machine_2
+    domain: switch
+  action:
+  - type: turn_off
+    device_id: 64e4abfbcf96085a8eb3e9e56c0bde3b
+    entity_id: switch.espresso_machine_2
+    domain: switch
+  mode: single
+- id: '1590343752481'
+  alias: Solar Shades - Open
+  description: ''
+  trigger:
+  - type: illuminance
+    platform: device
+    device_id: 79624989bdef10610145aab295945595
+    entity_id: sensor.livingroom_sensor_illuminance
+    domain: sensor
+    below: 25
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  - event: sunset
+    offset: -00:45
+    platform: sun
+  condition:
+  - condition: or
+    conditions:
+    - condition: device
+      device_id: a870793d26dbb43aed868c98331e69c7
+      domain: cover
+      entity_id: cover.right_solar_shade_2
+      type: is_closed
+    - condition: device
+      device_id: 4ec936107c8366ee3177c81ca7c3a052
+      domain: cover
+      entity_id: cover.left_solar_shade
+      type: is_closed
+  action:
+  - type: turn_on
+    device_id: a870793d26dbb43aed868c98331e69c7
+    entity_id: switch.right_solar_shade_2
+    domain: switch
+  - type: turn_on
+    device_id: 4ec936107c8366ee3177c81ca7c3a052
+    entity_id: switch.left_solar_shade
+    domain: switch
+  mode: single
+- id: '1590344012154'
+  alias: Solar Shades - Close
+  description: ''
+  trigger:
+  - type: illuminance
+    platform: device
+    device_id: 79624989bdef10610145aab295945595
+    entity_id: sensor.livingroom_sensor_illuminance
+    domain: sensor
+    above: 150
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+      milliseconds: 0
+  condition:
+  - after: sunrise
+    after_offset: +01:00
+    before: sunset
+    before_offset: -01:00
+    condition: sun
+  - above: '65'
+    condition: numeric_state
+    entity_id: sensor.livingroom_sensor_air_temperature
+  - above: '60'
+    condition: numeric_state
+    entity_id: sensor.openweathermap_temperature
+  - condition: or
+    conditions:
+    - condition: device
+      device_id: 4ec936107c8366ee3177c81ca7c3a052
+      domain: cover
+      entity_id: cover.left_solar_shade
+      type: is_open
+    - condition: device
+      device_id: a870793d26dbb43aed868c98331e69c7
+      domain: cover
+      entity_id: cover.right_solar_shade_2
+      type: is_open
+  action:
+  - type: turn_off
+    device_id: 4ec936107c8366ee3177c81ca7c3a052
+    entity_id: switch.left_solar_shade
+    domain: switch
+  - type: turn_off
+    device_id: a870793d26dbb43aed868c98331e69c7
+    entity_id: switch.right_solar_shade_2
+    domain: switch
+  mode: single
+- id: '1591155410264'
+  alias: Master Bathroom Motion - Night
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.node_74_home_security_motion_detection
+    platform: state
+    from: 'off'
+    to: 'on'
+  condition:
+  - after: 00:00:00
+    before: 06:00:00
+    condition: time
+  action:
+  - scene: scene.master_bathroom_night
+  - type: turn_on
+    device_id: 88866f37754b830a9dd41d79a1063e19
+    entity_id: switch.house_vent_fan_3
+    domain: switch
+  - data: {}
+    entity_id: input_boolean.mbr_motion_triggered
+    service: homeassistant.turn_on
+  mode: single
+- id: '1591155632642'
+  alias: Master Bathroom Motion - Day
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.node_74_home_security_motion_detection
+    platform: state
+    to: 'on'
+    from: 'off'
+  condition:
+  - after: 06:00:00
+    before: 00:00:00
+    condition: time
+  action:
+  - scene: scene.master_bathroom_day
+  - type: turn_on
+    device_id: 88866f37754b830a9dd41d79a1063e19
+    entity_id: switch.house_vent_fan_3
+    domain: switch
+  - data: {}
+    entity_id: input_boolean.mbr_motion_triggered
+    service: homeassistant.turn_on
+  mode: single
+- id: '1591155792425'
+  alias: Master Bathroom Motion - Off
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.node_74_home_security_motion_detection
+    for: 0:30:00
+    platform: state
+    from: 'on'
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: binary_sensor.node_74_home_security_motion_detection
+    state: 'off'
+  - condition: state
+    entity_id: input_boolean.mbr_motion_triggered
+    state: 'on'
+  action:
+  - scene: scene.master_bathroom_off
+  - type: turn_off
+    device_id: 88866f37754b830a9dd41d79a1063e19
+    entity_id: switch.house_vent_fan_3
+    domain: switch
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.mbr_motion_triggered
+  mode: single
+- id: '1615757989229'
+  alias: Sunset Lights - Away
+  description: ''
+  trigger:
+  - event: sunset
+    offset: -00:15
+    platform: sun
+  condition:
+  - condition: state
+    entity_id: person.jj
+    state: not_home
+  action:
+  - data: {}
+    service: automation.trigger
+    target:
+      entity_id: automation.occupancy_lights_away
+  mode: single
+- id: '1615764373036'
+  alias: Bathroom Timeout - Guest
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: f93879dfe29ebe744ff3ff86a93cf7c5
+    entity_id: light.guest_bathroom
+    domain: light
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  condition:
+  - condition: state
+    entity_id: input_boolean.bathroom_timeouts
+    state: 'on'
+  action:
+  - type: turn_off
+    device_id: f93879dfe29ebe744ff3ff86a93cf7c5
+    entity_id: light.guest_bathroom
+    domain: light
+  mode: single
+- id: '1615764429050'
+  alias: Closet Timeout - Front Guest
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 8db2b28dccc563acd943ad8e266f6181
+    entity_id: switch.front_guestroom_closet
+    domain: switch
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 8db2b28dccc563acd943ad8e266f6181
+    entity_id: switch.front_guestroom_closet
+    domain: switch
+  mode: single
+- id: '1615764453154'
+  alias: Closet Timeout - Back Guest
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_off
+    device_id: 57c90f303162aabd2bd8d0c7baf163e8
+    entity_id: switch.back_guestroom_closet
+    domain: switch
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 57c90f303162aabd2bd8d0c7baf163e8
+    entity_id: switch.back_guestroom_closet
+    domain: switch
+  mode: single
+- id: '1615764475203'
+  alias: Closet Timeout - Entryway
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_off
+    device_id: 3d8e3dcc05ac7fdf3c47d2998e2451c1
+    entity_id: switch.entryway_closet
+    domain: switch
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 3d8e3dcc05ac7fdf3c47d2998e2451c1
+    entity_id: switch.entryway_closet
+    domain: switch
+  mode: single
+- id: '1615764539265'
+  alias: General Timeout - Crawlspace
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 48c89d1739c6029f00ad7971627262dc
+    entity_id: switch.crawlspace
+    domain: switch
+    for:
+      hours: 12
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 48c89d1739c6029f00ad7971627262dc
+    entity_id: switch.crawlspace
+    domain: switch
+  mode: single
+- id: '1615764568638'
+  alias: General Timeout - Garage Attic
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_off
+    device_id: 6fe6075ca79fa6449c4a23956ec0465c
+    entity_id: switch.garage_attic_8
+    domain: switch
+    for:
+      hours: 12
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 6fe6075ca79fa6449c4a23956ec0465c
+    entity_id: switch.garage_attic_8
+    domain: switch
+  mode: single
+- id: '1615764591548'
+  alias: General Timeout - Garage Air Filter
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_off
+    device_id: ac524ce5f4e5bc2188249b31fa416f2f
+    entity_id: switch.garage_air_filter_5
+    domain: switch
+    for:
+      hours: 4
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  condition: []
+  action:
+  - type: turn_off
+    device_id: ac524ce5f4e5bc2188249b31fa416f2f
+    entity_id: switch.garage_air_filter_5
+    domain: switch
+  mode: single

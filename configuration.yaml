@@ -1,0 +1,40 @@
+default_config:
+
+homeassistant:
+  packages: !include_dir_named packages
+  customize: !include customize.yaml
+
+http:
+  ssl_certificate: /ssl/cert.pem 
+  ssl_key: /ssl/privkey.pem
+
+tts:
+  - platform: google_translate
+
+media_player:
+
+weather:
+
+sensor:
+
+camera:
+  - platform: generic
+    name: Gate Camera
+    still_image_url: https://front-gate.local/snap.jpeg 
+    stream_source: !secret front_gate_cam_stream 
+    verify_ssl: false
+  - platform: generic
+    name: Front Yard
+    still_image_url: https://front-yard.local/snap.jpeg
+    stream_source: !secret front_yard_cam_stream 
+    verify_ssl: false
+
+recorder:
+  purge_keep_days: 90
+  db_url: !secret mysql
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+

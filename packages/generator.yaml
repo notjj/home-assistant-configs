@@ -1,0 +1,293 @@
+################################################################
+## Package / Generator
+################################################################
+#
+#  Version 0.1
+#
+#  This package is used to interwork with (only) Generac-brand standby
+#  generator systems with Nexus, Evolution and H100 controllers, also
+#  using the open-source "genmon" package.  This package typically
+#  runs on a dedicated Raspberry Pi (2, 3 or Zero) and is connected
+#  via a serial cable to the controller located inside the generator
+#  cabinet.  See:
+
+#     https://github.com/jgyates/genmon
+
+#  for additional information about genmon, how it works and what's
+#  required to implement it.  Thanks very much to the author for a
+#  quite complete and featureful monitoring system that can send
+#  email, SMS notifications and many other things!
+
+#  The genmon package consists of a number of components, the primary
+#  one being the actual Python script that communicates with the
+#  generator using a ModBus protocol.
+
+#  In practice, this means running the genmon.py and genserv.py (web
+#  server) daemons on the Raspberry Pi connected to the generator.
+
+#  Among the optional components is a daemon which can monitor
+#  the generator via genmon, and publish relevant information to
+#  MQTT topics.
+
+#  This module implements a means to collect this data without
+#  requiring a custom component, or additional software that needs to
+#  run.  This uses a number of MQTT sensors and jinga2 templates to
+#  parse the data published to various MQTT topics
+
+#  Louis Mamakos <louie@transsys.com>
+#  18 August 2018
+
+################################################
+## Customize
+################################################
+
+homeassistant:
+  customize:
+    ################################################
+    ## Node Anchors
+    ################################################
+
+    package.node_anchors:
+      customize: &customize
+        package: 'generator'
+
+    ################################################
+    ## generator customization
+    ################################################
+    sensor.genmon_outage_status:
+      friendly_name: 'Generator Status'
+
+    
+################################################
+## generator sensors
+################################################
+
+sensor:
+  - platform: mqtt
+    state_topic: 'generator/Outage/Status'
+    name: Genmon Outage Status
+    #friendly_name: 'Generator Status'
+    expire_after: 300
+    force_update: true
+    
+  - platform: mqtt
+    state_topic: 'generator/Outage/Utility Voltage'
+    name: Genmon Outage Utility Voltage
+    #friendly_name: 'Generator Utility Voltage'
+    value_template: '{{ value | regex_replace(" V", "") | float | round(1) }}'
+    unit_of_measurement: "VAC"
+    expire_after: 300
+    force_update: true
+
+  # status related sensors
+  - platform: mqtt
+    name: Genmon Generator Battery
+    state_topic: 'generator/Status/Engine/Battery Voltage'
+    #friendly_name: 'Generator Battery Voltage'
+    unit_of_measurement: "V"
+    value_template: '{{ value | regex_replace(" V", "") | float }}'
+    expire_after: 300
+    force_update: true
+
+  - platform: mqtt
+    name:  Genmon Generator RPM
+    #friendly_name: 'Generator RPM'
+    unit_of_measurement: "RPM"
+    state_topic: 'generator/Status/Engine/RPM'
+    value_template: '{{ value | int }}'
+    expire_after: 300
+    force_update: true
+
+  - platform: mqtt
+    name: Genmon Generator Frequency
+    #friendly_name: 'Generator Frequency'
+    unit_of_measurement: "HZ"
+    state_topic: 'generator/Status/Engine/Frequency'
+    value_template: '{{ value | regex_replace(" Hz","") | float }}'
+    expire_after: 300
+    force_update: true
+
+  - platform: mqtt
+    name: Genmon Generator Output Voltage
+    #friendly_name: 'Generator Output Voltage'
+    unit_of_measurement: "VAC"
+    state_topic: 'generator/Status/Engine/Output Voltage'
+    value_template: '{{ value | regex_replace(" V","") | float | round(1) }}'
+    expire_after: 300
+    force_update: true
+
+  # current measrement is garbage on 22KW product, apparently
+  - platform: mqtt
+    name: Genmon Generator Output Current
+    #friendly_name: 'Generator Output Current'
+    unit_of_measurement: "A"
+    state_topic: 'generator/Status/Engine/Output Current'
+    value_template: '{{ value | regex_replace(" A","") | float | round(1) }}'
+    expire_after: 300
+    force_update: true
+        
+  - platform: mqtt
+    name: Genmon Generator Output Power
+    #friendly_name: 'Generator Output Power'
+    unit_of_measurement: "W"
+    state_topic: 'generator/Status/Engine/Output Power (Single Phase)'
+    # this is normalized to watts from kilowatts
+    value_template: '{{ value | regex_replace(" kW","") | float * 1000 | round(0) }}'
+    expire_after: 300
+    force_update: true
+
+  - platform: mqtt
+    name: Genmon Generator Last Alarm Log
+    #friendly_name: 'Generator Last Alarm'
+    state_topic: 'generator/Status/Last Log Entries/Logs/Alarm Log'
+    expire_after: 300
+    force_update: true
+        
+  - platform: mqtt
+    name: Genmon Generator Last Service Log
+    #friendly_name: 'Generator Last Service Log'
+    state_topic: 'generator/Status/Last Log Entries/Logs/Service Log'
+    expire_after: 300
+    force_update: true
+
+  - platform: mqtt
+    name: Genmon Generator Last Action
+    #friendly_name: 'Generator Last Action'
+    state_topic: 'generator/Status/Last Log Entries/Logs/Start Stop Log'
+    expire_after: 300
+    force_update: true
+    
+    # maint related sensors
+  - platform: mqtt
+    name: Genmon Generator Capacity
+    #friendly_name: 'Generator Capacity'
+    state_topic: 'generator/Maintenance/Rated kW'
+    # normalize to watts
+    value_template: '{{ value | float * 1000 | round(1) }}'
+    unit_of_measurement: 'W'
+    expire_after: 300
+    force_update: true
+
+  - platform: mqtt
+    name: Genmon Generator Exercise Time
+    #friendly_name: 'Generator Exercise Time'
+    state_topic: 'generator/Maintenance/Exercise/Exercise Time'
+    # might be nice to maybe somehow normalize this, but not sure into what date/time representation
+    # value is something like:  "Weekly Sunday 17:35 Quiet Mode On"
+    expire_after: 300
+    force_update: true
+
+  # genmon monitor related sensors
+  - platform: mqtt
+    name: Genmon Mon CPU Temperature
+    #friendly_name: 'Generator CPU Temperature'
+    unit_of_measurement: "F"
+    state_topic: 'generator/Monitor/Platform Stats/CPU Temperature'
+    value_template: '{{ value | regex_replace(" F","") | float | round(1) }}'
+    expire_after: 300
+    force_update: true
+
+  - platform: mqtt
+    name: Genmon Mon Uptime
+    #friendly_name: 'Generator Monitor Uptime'
+    # maybe parse this out into minutes/hours?
+    state_topic: 'generator/Monitor/Platform Stats/System Uptime'
+    expire_after: 300
+    force_update: true
+
+  - platform: mqtt
+    name: Genmon Mon Load
+    #friendly_name: 'Generator Monitor Load'
+    unit_of_measurement: '%'
+    state_topic: 'generator/Monitor/Platform Stats/CPU Utilization'
+    value_template: '{{ value | regex_replace(" *%","") | float | round(1) }}'
+    expire_after: 300
+    force_update: true
+
+#
+#  probably the most useful sensor - are we in a power outage condition or not?
+#
+binary_sensor:
+  - platform: mqtt
+    name: Genmon Power Outage
+    #friendly_name: 'Generator Power Outage'
+    state_topic: 'generator/Outage/System In Outage'
+    payload_on: 'Yes'
+    payload_off: 'No'
+    expire_after: 300
+
+group:
+  generator_stats:
+    name: generator
+    #view: true
+    entities:
+      - binary_sensor.genmon_power_outage
+      - sensor.genmon_outage_status
+      - sensor.genmon_outage_utility_voltage
+      - sensor.genmon_generator_battery
+      - sensor.genmon_generator_rpm
+      - sensor.genmon_generator_frequency
+      - sensor.genmon_generator_output_voltage
+      - sensor.genmon_generator_output_current
+      - sensor.genmon_generator_output_power
+      - sensor.genmon_generator_last_alarm_log
+      - sensor.genmon_generator_last_service_log
+      - sensor.genmon_generator_last_action
+      - sensor.genmon_generator_capacity
+      - sensor.genmon_generator_exercise_time
+      - sensor.genmon_mon_cpu_temperature
+      - sensor.genmon_mon_uptime
+      - sensor.genmon_mon_load
+
+automation:
+  - alias: 'start power outage'
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.genmon_power_outage
+        from: 'off'
+        to: 'on'
+        # so ideally wait a little bit for the generator to time out the utility power
+        # loss, start and operate the automatic transfer switch from utility to generator
+        # network equipment should be a UPS.. hopefully ISP connectivity is still working
+        for:
+          seconds: 45
+    action:
+      - service: notify.notify
+        data:
+          message: "Utiliy Power Loss at {{  now().strftime('%Y-%m-%d %H:%M:%S') }}"
+          title: "Generator"
+
+# maybe also initiate a zwave heal network or something after power is restored to
+# from standby generator after a ~45 second interruption?  Switch back is pretty
+# quick, with only a couple hundred millisecond transfer time in the ATS..
+
+#
+  - alias: end power outage
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.genmon_power_outage
+        from: 'on'
+        to: 'off'
+    action:
+      - service: notify.notify
+        data:
+          message: "Transfer back to utiliy power at {{  now().strftime('%Y-%m-%d %H:%M:%S') }}"
+          title: "Generator"
+
+# Notify of loss of data from Generator (genmon dead?)  
+  - alias: no mqtt data
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: sensor.genmon_generator_battery
+        to: 'unknown'
+        for:
+          minutes: 5
+    action:
+      - service: notify.notify
+        data:
+          message: "No data for 5 minutes -  {{  now().strftime('%Y-%m-%d %H:%M:%S') }}"
+          title: "Generator"
+
