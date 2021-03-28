@@ -104,7 +104,7 @@ sensor:
       {% elif value == "Stopped in Alarm" %}
         Stopped - Alarm
       {% elif value == "Off - Ready" %}
-        Stopped - Ready
+        Standby
       {% elif value == "Exercising" %}
         Exercising
       {% elif value == "Cooling Down" %}
@@ -260,10 +260,13 @@ sensor:
         friendly_name: "Generator Control Status"
         value_template: "{{ states('sensor.genmon_generator_switch_status') }}"
         icon_template: >
-          {% if is_state('sensor.genmon_generator_switch_status', 'Auto') %}
+          {% set gen_state = states('sensor.genmon_generator_switch_status') %}
+          {% if gen_state == 'Auto' %}
             mdi:restart
-          {% elif is_state('sensor.genmon_generator_switch_status', 'Manual') %}
+          {% elif gen_state == 'Manual' %}
             mdi:engine
+          {% elif gen_state == 'Unavailable' %}
+            mdi:help-circle-outline
           {% else %}
             mdi:close-octagon-outline
           {% endif %}
@@ -272,7 +275,7 @@ sensor:
         value_template: "{{ states('sensor.genmon_generator_status') }}"
         icon_template: >-
           {% set gen_state = states('sensor.genmon_generator_status') %}
-          {% if gen_state|regex_match('^(Stopped( \- Ready)?)|(Cooling Down)$') %}
+          {% if gen_state|regex_match('(Stopped)|(Standby)|(Cooling Down)$') %}
             mdi:engine-outline
           {% elif gen_state == 'Cranking' %}
             mdi:restart
@@ -285,6 +288,7 @@ sensor:
           {% else %}
             mdi:help-circle-outline
           {% endif %}
+
 #
 #  probably the most useful sensor - are we in a power outage condition or not?
 #
@@ -297,28 +301,30 @@ binary_sensor:
     payload_off: 'No'
     expire_after: 300
 
-group:
-  generator_stats:
-    name: generator
-    #view: true
-    entities:
-      - binary_sensor.genmon_power_outage
-      - sensor.genmon_outage_status
-      - sensor.genmon_outage_utility_voltage
-      - sensor.genmon_generator_battery
-      - sensor.genmon_generator_rpm
-      - sensor.genmon_generator_frequency
-      - sensor.genmon_generator_output_voltage
-      - sensor.genmon_generator_output_current
-      - sensor.genmon_generator_output_power
-      - sensor.genmon_generator_last_alarm_log
-      - sensor.genmon_generator_last_service_log
-      - sensor.genmon_generator_last_action
-      - sensor.genmon_generator_capacity
-      - sensor.genmon_generator_exercise_time
-      - sensor.genmon_mon_cpu_temperature
-      - sensor.genmon_mon_uptime
-      - sensor.genmon_mon_load
+  - platform: template
+    sensors:
+      generator_warning:
+        friendly_name: 'Generator Warning'
+        value_template: >
+          {{ states('sensor.genmon_generator_status')|regex_match('[A-Za-z]* \- Warning$') }}
+        icon_template: >
+          {% if states('sensor.genmon_generator_status')|regex_match('[A-Za-z]* \- Warning$') %} 
+            mdi:alert
+          {% else %}
+            mdi:alert-outline
+          {% endif %}
+
+      generator_alarm:
+        friendly_name: 'Generator Alarm'
+        value_template: > 
+          {{ states('sensor.genmon_generator_status')|regex_match('[A-Za-z]* \- Alarm$') }}
+        icon_template: >
+          {% if states('sensor.genmon_generator_status')|regex_match('[A-Za-z]* \- Alarm$') %}
+            mdi:alert-octagon
+          {% else %}
+            mdi:alert-octagon-outline
+          {% endif %}
+
 
 automation:
   - alias: Generator - Start Power Outage 
