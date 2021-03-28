@@ -351,7 +351,7 @@ automation:
         data:
           title: Generator Alarm
           message: > 
-            {{ states(sensor.genmon_generator_status)|regex_replace('\- Alarm$','') }} - {{ states(sensor.genmon_generator_last_alarm_log)|regex_replace('^(\d\d\/?)\{3,3}\ (\d\d\:?){3,3} ', '') }}
+            {{ states('sensor.genmon_generator_status')|regex_replace('\- Alarm$','') }} - {{ states('sensor.genmon_generator_last_alarm_log')|regex_replace('^(\d\d\/?){3,} (\d\d\:?){3,} ', '') }}
 
 
 # Generator Turned Off (either by E-Stop or Switch)
