@@ -55,9 +55,12 @@ homeassistant:
     ## generator customization
     ################################################
     sensor.genmon_outage_status:
+      friendly_name: 'Power Outage Status'
+    sensor.genmon_generator_status:
       friendly_name: 'Generator Status'
+    sensor.genmon_generator_switch_status:
+      friendly_name: 'Generator Control Status'
 
-    
 ################################################
 ## generator sensors
 ################################################
@@ -250,6 +253,38 @@ sensor:
     expire_after: 300
     force_update: true
 
+
+  - platform: template
+    sensors:
+      generator_control_status:
+        friendly_name: "Generator Control Status"
+        value_template: "{{ states('sensor.genmon_generator_switch_status') }}"
+        icon_template: >
+          {% if is_state('sensor.genmon_generator_switch_status', 'Auto') %}
+            mdi:restart
+          {% elif is_state('sensor.genmon_generator_switch_status', 'Manual') %}
+            mdi:engine
+          {% else %}
+            mdi:close-octagon-outline
+          {% endif %}
+      generator_engine_status:
+        friendly_name: "Generator Status"
+        value_template: "{{ states('sensor.genmon_generator_status') }}"
+        icon_template: >-
+          {% set gen_state = states('sensor.genmon_generator_status') %}
+          {% if gen_state|regex_match('^(Stopped( \- Ready)?)|(Cooling Down)$') %}
+            mdi:engine-outline
+          {% elif gen_state == 'Cranking' %}
+            mdi:restart
+          {% elif gen_state == 'Running' %}
+            mdi:engine
+          {% elif gen_state|regex_match('[A-Za-z]* \- Alarm$') %}
+            mdi:alert-octagon-outline
+          {% elif gen_state|regex_match('[A-Za-z]* \- Warning$') %}
+            mdi:alert-outline
+          {% else %}
+            mdi:help-circle-outline
+          {% endif %}
 #
 #  probably the most useful sensor - are we in a power outage condition or not?
 #
