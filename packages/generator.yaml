@@ -66,20 +66,66 @@ sensor:
   - platform: mqtt
     state_topic: 'generator/Outage/Status'
     name: Genmon Outage Status
-    #friendly_name: 'Generator Status'
     expire_after: 300
     force_update: true
     
   - platform: mqtt
     state_topic: 'generator/Outage/Utility Voltage'
     name: Genmon Outage Utility Voltage
-    #friendly_name: 'Generator Utility Voltage'
     value_template: '{{ value | regex_replace(" V", "") | float | round(1) }}'
     unit_of_measurement: "VAC"
     expire_after: 300
     force_update: true
 
   # status related sensors
+  - platform: mqtt
+    name: Genmon Generator Status
+    state_topic: 'generator/Status/Engine/Engine State'
+    value_template: >
+      {% if value == "Running" %}
+        Running
+      {% elif value == "Running in Warning" %}
+        Running - Warning
+      {% elif value == "Runing in Alarm" %}
+        Running - Alarm
+      {% elif value == "Cranking" %}
+        Cranking
+      {% elif value == "Cranking in Warning" %}
+        Cranking - Warning
+      {% elif value == "Cranking in Alarm" %}
+        Cranking - Alarm
+      {% elif value == "Stopped" %}
+        Stopped
+      {% elif value == "Stopped in Warning" %}
+        Stopped - Warning
+      {% elif value == "Stopped in Alarm" %}
+        Stopped - Alarm
+      {% elif value == "Off - Ready" %}
+        Stopped - Ready
+      {% elif value == "Exercising" %}
+        Exercising
+      {% elif value == "Cooling Down" %}
+        Cooldown
+      {% else %}
+        Unknown
+      {% endif %}
+    expire_after: 300
+    force_update: true
+
+  - platform: mqtt
+    name: Genmon Generator Switch Status
+    state_topic: 'generator/Status/Engine/Switch State'
+    #friendly_name: 'Generator Switch State'
+    value_template: >
+      {% if value == "System in Alarm" %}
+        Alarm
+      {% else %}
+        {{ value }}
+      {% endif %}
+    expire_after: 300
+    force_update: true
+
+
   - platform: mqtt
     name: Genmon Generator Battery
     state_topic: 'generator/Status/Engine/Battery Voltage'
@@ -153,7 +199,7 @@ sensor:
   - platform: mqtt
     name: Genmon Generator Last Action
     #friendly_name: 'Generator Last Action'
-    state_topic: 'generator/Status/Last Log Entries/Logs/Start Stop Log'
+    state_topic: 'generator/Status/Last Log Entries/Logs/Run Log'
     expire_after: 300
     force_update: true
     
@@ -240,7 +286,7 @@ group:
       - sensor.genmon_mon_load
 
 automation:
-  - alias: 'start power outage'
+  - alias: Generator - Start Power Outage 
     initial_state: 'on'
     trigger:
       - platform: state
@@ -263,7 +309,7 @@ automation:
 # quick, with only a couple hundred millisecond transfer time in the ATS..
 
 #
-  - alias: end power outage
+  - alias: Generator - End Power Outage 
     initial_state: true
     trigger:
       - platform: state
@@ -277,7 +323,7 @@ automation:
           title: "Generator"
 
 # Notify of loss of data from Generator (genmon dead?)  
-  - alias: no mqtt data
+  - alias: Generator - No MQTT Data
     initial_state: true
     trigger:
       - platform: state
@@ -290,4 +336,35 @@ automation:
         data:
           message: "No data for 5 minutes -  {{  now().strftime('%Y-%m-%d %H:%M:%S') }}"
           title: "Generator"
+
+# Notify on Alarm Status
+  - alias: Generator - Alarm
+    trigger:
+      - platform: state
+        entity_id: sensor.genmon_generator_status
+    condition:
+      - condition: template
+        value_template: >
+          {{ states('sensor.genmon_generator_status')|regex_match('[A-Za-z]* \- Alarm$') }}
+    action:
+      - service: notify.notify
+        data:
+          title: Generator Alarm
+          message: > 
+            {{ states(sensor.genmon_generator_status)|regex_replace('\- Alarm$','') }} - {{ states(sensor.genmon_generator_last_alarm_log)|regex_replace('^(\d\d\/?)\{3,3}\ (\d\d\:?){3,3} ', '') }}
+
+
+# Generator Turned Off (either by E-Stop or Switch)
+  - alias: Generator - Switched Off
+    trigger:
+      - platform: state
+        entity_id: sensor.genmon_generator_switch_status
+        to: 'Off'
+        for:
+          seconds: 10
+    action:
+      - service: notify.notify
+        data:
+          title: Generator
+          message: "Generator is Switched Off" 
 

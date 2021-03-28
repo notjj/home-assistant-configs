@@ -612,27 +612,26 @@
   entities:
     switch.office:
       friendly_name: Office
-      polling_intensity: 2
       state: 'on'
     light.kitchen_island:
       brightness: 255
       friendly_name: Kitchen Island
       supported_features: 33
-      polling_intensity: 2
       state: 'on'
     light.master_hall_lights:
       brightness: 255
       friendly_name: Master Hall Lights
       supported_features: 33
-      polling_intensity: 2
       state: 'on'
     switch.stairs_uplights:
       friendly_name: Stairs Uplights
-      polling_intensity: 2
+      icon: mdi:stairs
       state: 'on'
     switch.back_entryway:
       friendly_name: Back Entryway
-      polling_intensity: 2
+      state: 'on'
+    switch.master_lights:
+      friendly_name: Master Lights
       state: 'on'
 - id: '1615765201790'
   name: Master Bathroom - Day
@@ -647,10 +646,10 @@
   name: Master Bathroom - Night
   entities:
     light.master_bathroom:
-      brightness: 255
+      brightness: 82
       friendly_name: Master Bathroom
+      icon: mdi:toilet
       supported_features: 33
-      polling_intensity: 2
       state: 'on'
 - id: '1615765289797'
   name: Master Bathroom - Off
@@ -686,3 +685,23 @@
     switch.stairs_downlights:
       friendly_name: Stairs Downlights
       state: 'on'
+- id: '1616111012601'
+  name: Office - Low Light
+  entities:
+    switch.office:
+      friendly_name: Office
+      state: 'on'
+    switch.stairs_uplights:
+      friendly_name: Stairs Uplights
+      icon: mdi:stairs
+      state: 'on'
+- id: '1616111035386'
+  name: Office - Low Light Off
+  entities:
+    switch.office:
+      friendly_name: Office
+      state: 'off'
+    switch.stairs_uplights:
+      friendly_name: Stairs Uplights
+      icon: mdi:stairs
+      state: 'off'

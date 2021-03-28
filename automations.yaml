@@ -24,6 +24,10 @@
   condition: []
   action:
   - scene: scene.outside_all_off
+  - type: turn_off
+    device_id: 33a0e14f980f502b3c35983b0fea3e0c
+    entity_id: switch.stairs_downlights
+    domain: switch
   mode: single
 - id: '1586310341649'
   alias: Nighttime Lights - Home
@@ -545,4 +549,161 @@
     device_id: ac524ce5f4e5bc2188249b31fa416f2f
     entity_id: switch.garage_air_filter_5
     domain: switch
+  mode: single
+- id: '1616110972665'
+  alias: Office Lights - Low Light
+  description: ''
+  trigger:
+  - type: illuminance
+    platform: device
+    device_id: 6cf405aaeb0cced8b3663dc912920886
+    entity_id: sensor.office_sensor_illuminance
+    domain: sensor
+    below: 15
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+      milliseconds: 0
+  condition:
+  - condition: state
+    entity_id: person.jj
+    state: home
+  - condition: time
+    after: '10:00'
+    before: '23:59'
+  action:
+  - service: scene.turn_on
+    target:
+      entity_id: scene.office_low_light
+  mode: single
+- id: '1616111239954'
+  alias: Office Lights - Bright
+  description: ''
+  trigger:
+  - type: illuminance
+    platform: device
+    device_id: 6cf405aaeb0cced8b3663dc912920886
+    entity_id: sensor.office_sensor_illuminance
+    domain: sensor
+    above: 50
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+      milliseconds: 0
+  condition:
+  - condition: device
+    type: is_on
+    device_id: c86bbcf69dd8dac3cbaf8dcc6749e37d
+    entity_id: switch.office
+    domain: switch
+  action:
+  - service: scene.turn_on
+    target:
+      entity_id: scene.office_low_light_off
+  mode: single
+- id: '1616797289538'
+  alias: Vaccuum - Living Room
+  description: ''
+  trigger:
+  - platform: time
+    at: '10:00:00'
+  condition:
+  - condition: time
+    weekday:
+    - mon
+  action:
+  - device_id: dd037ae64b4cf799b0b3a62ac8085ca7
+    domain: vacuum
+    entity_id: vacuum.downstairs_roomba
+    type: clean
+  mode: single
+- id: '1616886283228'
+  alias: Vacuum - Upstairs
+  description: ''
+  trigger:
+  - platform: time
+    at: '12:00:00'
+  condition:
+  - condition: time
+    weekday:
+    - sat
+  action:
+  - device_id: 4bbc20e07f08ce6c15e855d6885da481
+    domain: vacuum
+    entity_id: vacuum.upstairs
+    type: clean
+  mode: single
+- id: '1616886946726'
+  alias: Vacuum Stuck - Upstairs
+  description: ''
+  trigger:
+  - platform: template
+    value_template: '{{ is_state_attr("vacuum.upstairs", "status", "Stuck") }}'
+  condition: []
+  action:
+  - service: notify.notify
+    data:
+      message: Upstairs Roomba is Stuck
+      title: Vacuum
+  mode: single
+- id: '1616887121694'
+  alias: Vacuum Stuck - Living Room
+  description: ''
+  trigger:
+  - platform: template
+    value_template: '{{ is_state_attr("vacuum.downstairs_roomba", "status", "Stuck")
+      }}'
+  condition: []
+  action:
+  - service: notify.notify
+    data:
+      message: Living Room Roomba is Stuck
+      title: Vacuum
+  mode: single
+- id: '1616887197580'
+  alias: New Automation
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.downstairs_roomba_bin_full
+    from: 'false'
+    to: 'true'
+  condition: []
+  action:
+  - service: notify.notify
+    data:
+      message: Living Room Roomba is Full
+      title: Vacuum
+  mode: single
+- id: '1616887276743'
+  alias: Vacuum Full - Living Room
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.downstairs_roomba_bin_full
+    from: 'false'
+    to: 'true'
+  condition: []
+  action:
+  - service: notify.notify
+    data:
+      message: Living Room Roomba is Full
+      title: Vacuum
+  mode: single
+- id: '1616887320924'
+  alias: Vacuum Full - Upstairs
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.upstairs_bin_full
+    from: 'false'
+    to: 'true'
+  condition: []
+  action:
+  - service: notify.notify
+    data:
+      message: Upstairs Roomba is Full
+      title: Vacuum
   mode: single
