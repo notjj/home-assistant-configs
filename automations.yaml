@@ -612,7 +612,7 @@
   condition:
   - condition: time
     weekday:
-    - mon
+    - tue
   action:
   - device_id: dd037ae64b4cf799b0b3a62ac8085ca7
     domain: vacuum
@@ -706,4 +706,49 @@
     data:
       message: Upstairs Roomba is Full
       title: Vacuum
+  mode: single
+- id: '1616969421103'
+  alias: Vacuum Stuck - Downstairs
+  description: ''
+  trigger:
+  - platform: template
+    value_template: '{{ is_state_attr("vacuum.downstairs_roomba", "status", "Stuck")
+      }}'
+  condition: []
+  action:
+  - service: notify.notify
+    data:
+      message: Downstairs Roomba is Stuck
+      title: Vacuum
+  mode: single
+- id: '1616969501075'
+  alias: Vacuum Full - Downstairs
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.downstairs_bin_full
+    from: 'false'
+    to: 'true'
+  condition: []
+  action:
+  - service: notify.notify
+    data:
+      message: Downstairs Roomba is Full
+      title: Vacuum
+  mode: single
+- id: '1616969582317'
+  alias: Vacuum - Downstairs
+  description: ''
+  trigger:
+  - platform: time
+    at: '10:00:00'
+  condition:
+  - condition: time
+    weekday:
+    - tue
+  action:
+  - device_id: 5d1b0f26cb8cee51e37bdb8a561418ce
+    domain: vacuum
+    entity_id: vacuum.downstairs
+    type: clean
   mode: single
