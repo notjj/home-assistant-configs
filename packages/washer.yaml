@@ -1,0 +1,133 @@
+input_boolean:
+  washing_machine_notification:
+    name: Washing Machine Notification
+    initial: on
+    icon: mdi:washing-machine  
+
+input_select:
+  washing_machine_status:
+    name: Washing Machine Status
+    options:
+      - Idle
+      - Running
+      - Finishing
+      - Clean
+    initial: Idle
+
+sensor:
+  - platform: template
+    sensors:
+      washing_machine_status:
+        value_template: '{{ states.input_select.washing_machine_status.state}}'
+        friendly_name: 'Washing Machine Status'
+
+automation:
+
+# Control State of Washing Machine
+  - alias: Washer - Cycle Start 
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.washer_electric_consumed_w
+        above: 4
+    condition:
+      condition: or
+      conditions:
+        - condition: state
+          entity_id: sensor.washing_machine_status
+          state: Idle
+        - condition: state
+          entity_id: sensor.washing_machine_status
+          state: Clean
+    action:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.washing_machine_status
+          option: Running
+
+  - alias: Washer - Cycle Finishing
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.washer_electric_consumed_w
+        below: 4
+        for:
+          minutes: 7
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_select.washing_machine_status
+          state: Running
+    action:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.washing_machine_status
+          option: Finishing
+
+
+  - alias: Washer - Clean 
+    trigger:
+      - platform: state
+        entity_id: input_select.washing_machine_status
+        to: Finishing
+        for:
+          minutes: 1
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_select.washing_machine_status
+          state: Finishing
+    action:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.washing_machine_status
+          option: Clean
+
+
+  - alias: Washer - Reset State 
+    trigger:
+      - platform: state
+        entity_id: input_select.washing_machine_status
+        to: Clean
+        for:
+          minutes: 5
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_select.washing_machine_status
+          state: Clean
+    action:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.washing_machine_status
+          option: Idle
+
+
+# Send Alerts for Washing Machine
+
+  - alias: Washer - Notify when Clean 
+    trigger:
+      - platform: state
+        entity_id: sensor.washing_machine_status
+        to: Clean
+        for:
+          minutes: 1
+    condition:
+      condition: and
+      conditions:
+        - condition: time
+          before: '23:59:00'
+          after: '08:00:00'
+        - condition: state
+          entity_id: input_select.washing_machine_status
+          state: Clean
+        - condition: state
+          entity_id: input_boolean.washing_machine_notification
+          state: 'on'
+    action:
+      - service: notify.notify
+        data:
+          title: "Laundry"
+          message: "Washer Finished - {{ now().strftime('%H:%M') }}"
+

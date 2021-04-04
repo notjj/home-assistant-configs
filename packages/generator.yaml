@@ -281,6 +281,8 @@ sensor:
             mdi:restart
           {% elif gen_state == 'Running' %}
             mdi:engine
+          {% elif gen_state == 'Exercising' %}
+            mdi:engine
           {% elif gen_state|regex_match('[A-Za-z]* \- Alarm$') %}
             mdi:alert-octagon-outline
           {% elif gen_state|regex_match('[A-Za-z]* \- Warning$') %}

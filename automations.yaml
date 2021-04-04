@@ -232,7 +232,7 @@
     device_id: 79624989bdef10610145aab295945595
     entity_id: sensor.livingroom_sensor_illuminance
     domain: sensor
-    below: 25
+    below: 50
     for:
       hours: 0
       minutes: 30
@@ -241,19 +241,7 @@
   - event: sunset
     offset: -00:45
     platform: sun
-  condition:
-  - condition: or
-    conditions:
-    - condition: device
-      device_id: a870793d26dbb43aed868c98331e69c7
-      domain: cover
-      entity_id: cover.right_solar_shade_2
-      type: is_closed
-    - condition: device
-      device_id: 4ec936107c8366ee3177c81ca7c3a052
-      domain: cover
-      entity_id: cover.left_solar_shade
-      type: is_closed
+  condition: []
   action:
   - type: turn_on
     device_id: a870793d26dbb43aed868c98331e69c7
@@ -273,7 +261,7 @@
     device_id: 79624989bdef10610145aab295945595
     entity_id: sensor.livingroom_sensor_illuminance
     domain: sensor
-    above: 150
+    above: 250
     for:
       hours: 0
       minutes: 10
